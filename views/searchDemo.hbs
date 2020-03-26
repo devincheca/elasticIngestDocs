@@ -1,0 +1,53 @@
+<style>
+  div {
+    margin: .25em;
+  }
+</style>
+<div>
+  <div>
+    <p>Upload a Document and Search</p>
+  </div>
+  <div>
+    <form action="./docs/saveUploadedDoc"
+      method="POST"
+      enctype="multipart/form-data"
+      id="uploadForm">
+      <input type="file" id="fileBox" placeholder="Upload Here"
+        onchange="onFileSelect(this.value)"
+      />
+    </form>
+  </div>
+  <div>
+    <input type="text" placeholder="Search Here"
+    keyup="onSearch(this.value)"
+    />
+  </div> 
+</div>
+<script>
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+  async function onFileSelect(file) {
+    const file64 = await toBase64(document.getElementById('fileBox').files[0]);
+    const fileEncoding = file64.split(',')[1];
+    console.log(file64);
+    console.log(fileEncoding);
+    const res = await fetch('./docs/saveUploadedDoc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({
+        file64: fileEncoding,
+      })
+    });
+    const json = await res.json();
+    console.log(json);
+  }
+  function onSearch(input) {
+    console.log(input);
+  }
+</script>
