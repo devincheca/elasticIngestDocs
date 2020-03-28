@@ -2,7 +2,7 @@ const client = require('./elasticSetup');
 const indices = require('../elasticIndices');
 
 class saveDoc {
-  encodedFile = '';
+//   encodedFile = '';
   constructor() {
     this.encodedFile = '';
   }
